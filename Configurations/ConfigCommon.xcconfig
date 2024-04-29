@@ -71,7 +71,7 @@ INSTALLER_LAUNCHER_NAME = Installer
 DOWNLOADER_NAME = Downloader
 
 // Set this to your own prefix if you want to use XPC Service bundle IDs with different prefix
-XPC_SERVICE_BUNDLE_ID_PREFIX = org.sparkle-project
+XPC_SERVICE_BUNDLE_ID_PREFIX = fr.handbrake.sparkle-project
 
 INSTALLER_CONNECTION_BUNDLE_ID = ${XPC_SERVICE_BUNDLE_ID_PREFIX}.InstallerConnection
 INSTALLER_STATUS_BUNDLE_ID = ${XPC_SERVICE_BUNDLE_ID_PREFIX}.InstallerStatus
@@ -82,7 +82,7 @@ DOWNLOADER_BUNDLE_ID = ${XPC_SERVICE_BUNDLE_ID_PREFIX}.DownloaderService
 // Uncomment line to enable Sandboxing for this service.
 // If this is done, you *must* set a custom XPC_SERVICE_BUNDLE_ID_PREFIX for your app above.
 // Otherwise sandboxed apps that use the same sandboxed Downloader Service may conflict with each other.
-//DOWNLOADER_SANDBOXED_ENTITLEMENTS = Downloader/Downloader.entitlements
+DOWNLOADER_SANDBOXED_ENTITLEMENTS = Downloader/Downloader.entitlements
 
 
 // If your app file on disk is named "MyApp 1.1b4", Sparkle usually updates it

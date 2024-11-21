@@ -76,6 +76,7 @@ NSString *const SUUpdaterAppcastNotificationKey = @"SUUpdaterAppCastNotification
     BOOL _showingPermissionRequest;
     BOOL _loggedATSWarning;
     BOOL _loggedNoSecureKeyWarning;
+    BOOL _loggedUpdateSecurityPolicyWarning;
     BOOL _updatingMainBundle;
 }
 
@@ -361,6 +362,14 @@ NSString *const SUUpdaterAppcastNotificationKey = @"SUUpdaterAppCastNotification
         }
     }
     
+    if (_updatingMainBundle) {
+        if (!_loggedUpdateSecurityPolicyWarning && mainBundleHost.hasUpdateSecurityPolicy) {
+            SULog(SULogLevelDefault, @"Warning: %@ has a custom NSUpdateSecurityPolicy in its Info.plist. This may cause issues when installing updates. Please consider removing this key for your builds using Sparkle if you do not really require a custom update security policy.", hostName);
+            
+            _loggedUpdateSecurityPolicyWarning = YES;
+        }
+    }
+    
     return YES;
 }
 
@@ -549,7 +558,11 @@ NSString *const SUUpdaterAppcastNotificationKey = @"SUUpdaterAppCastNotification
 
 - (void)updaterTimerDidFire
 {
-    [self _checkForUpdatesInBackground];
+    // User can perform a checkForUpdates check around the same time the timer is ready to fire
+    if (!_sessionInProgress)
+    {
+        [self _checkForUpdatesInBackground];
+    }
 }
 
 - (void)_checkForUpdatesInBackground SPU_OBJC_DIRECT
@@ -695,8 +708,8 @@ NSString *const SUUpdaterAppcastNotificationKey = @"SUUpdaterAppCastNotification
 
 - (void)checkForUpdatesWithDriver:(id <SPUUpdateDriver> )d updateCheck:(SPUUpdateCheck)updateCheck installerInProgress:(BOOL)installerInProgress SPU_OBJC_DIRECT
 {
-    assert(_driver == nil);
     if (_driver != nil) {
+        SULog(SULogLevelError, @"Error: checkForUpdatesWithDriver:updateCheck:installerInProgress: called when _driver != nil");
         return;
     }
     

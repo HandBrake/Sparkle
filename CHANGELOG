@@ -1,3 +1,41 @@
+# 2.8.1
+
+* Enforce RunAtLoad to reduce potential timeout issue when launching updater task (#2795) (Zorg)
+* Add missing executable bit permission warnings on connection failure (#2792) (Zorg)
+* Add missing localizations to zh-CN & zh-TW (#2789, #2791) (Francis Feng)
+* Add documentation note for delegates being weakly referenced (#2802) (Zorg)
+* Include app name in startUpdater: failure in SPUStandardUpdaterController (#2780) (Zorg)
+
+# 2.8.0
+
+* UI modernization and macOS Tahoe support
+  * Modernize update alert and release notes UI (#2737) (Zorg, Noah Nuebling, Cykelero, Daniel Jalkut, Peter Nowell)
+  * Update retrieving app icon to work better in Tahoe (#2742) (Zorg)
+  * Improve retrieval of main app icon for authorization dialog (#2743) (Zorg)
+* Delta updates
+  * Improve bsdiff performance by preventing excessive iterations when processing similar data blocks (#2693) (Will Fairclough)
+  * Fix an issue while searching a cloneable file for delta updates (#2748, #2753) (Vincent Bénony, Zorg)
+  * Add support for relative URLs for delta updates (#2741) (jj)
+* Localization
+  * Set STRINGS_FILE_OUTPUT_ENCODING build setting to "binary" (#2712) (Nicolas Kick)
+  * Move all localizations to main Sparkle.strings (#2760) (Zorg)
+* Synchronize updater settings with user defaults to fix out-of-sync UI state (#2728) (Zorg)
+* Document and better enforce main thread only requirement for using Sparkle methods (#2746, #2754, #2768)) (Sebastien Marchand, Zorg)
+* Make -[SPUUserDriver showUpdateInFocus] optional (#2717) (Zorg)
+* Add private module map for framework (#2722) (Zorg)
+* Workaround a corner case in which the bundle path of a running application contains Contents/MacOS/Executable (#2726, #2747) (Jeremy Huddleston Sequoia, Zorg)
+* Disable false dependency scan analysis warnings when building Sparkle from source (#2762) (Daniel Jalkut)
+* Refactor the logic for avoiding re-sending the system profile more frequently than once a week (#2720) (Daniel Jalkut)
+* Remove deprecated interactive package installer type (#2767) (Zorg)
+
+# 2.7.3
+
+* Double quote team identifiers in requirement strings to fix crash if Team ID starts with number (#2766) (Zorg)
+
+# 2.7.2
+
+* Harden policy on what operations clients are allowed to take (#2763) (Zorg)
+
 # 2.7.1
 
 * Fix typo in NN localisation (#2694) (Sjur N Moshagen)

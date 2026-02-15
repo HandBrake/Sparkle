@@ -121,9 +121,6 @@
 /* Take care not to overflow the status window. */
 "Installing update…" = "Update installeren…";
 
-/* No comment provided by engineer. */
-"Interactive based packages cannot be installed as the root user." = "Interactieve Installatieprogramma-pakketen kunnen niet worden geïnstalleerd als de rootgebruiker.";
-
 /* Alternate title for 'Install Update' button when there's no download in RSS feed. */
 "Learn More…" = "Meer informatie…";
 
@@ -161,9 +158,6 @@
 "The installation failed due to not having permission to write the new update." = "De installatie is mislukt omdat je geen bevoegdheden hebt om de nieuwe update te schrijven.";
 
 /* No comment provided by engineer. */
-"The update checker failed to start correctly. You should contact the app developer to report this issue and verify that you have the latest version." = "De updatezoeker is niet goed gestart. Je kunt wellicht met de app-ontwikkelaar contact opnemen om de fout te melden en te controleren dat je de nieuwste versie hebt.";
-
-/* No comment provided by engineer. */
 "The update is improperly signed and could not be validated. Please try again later or contact the app developer." = "De update is onjuist gesigneerd en kan niet worden gecontroleerd. Probeer het later opnieuw of neem contact op met de app-ontwikkelaar.";
 
 /* No comment provided by engineer. */
@@ -198,3 +192,36 @@
 
 /* No comment provided by engineer. */
 "Your macOS version is too old" = "Je versie van macOS is te oud";
+
+/* Software Update title/label */
+"Software Update" = "Software-update";
+
+/* Remind Me Later choice for update alert */
+"Remind Me Later" = "Herinner mij later";
+
+/* Skip This Version choice for update alert */
+"Skip This Version" = "Sla deze versie over";
+
+/* Install Update choice for update alert */
+"Install Update" = "Installeer update";
+
+/* Automatically download and install updates in the future option for update alert */
+"Automatically download and install updates in the future" = "Download en installeer updates voortaan automatisch";
+
+/* Check for updates automatically response for update permission dialog */
+"Check Automatically" = "Zoek automatisch";
+
+/* Don't check for updates automatically response for update permission dialog */
+"Don’t Check" = "Zoek niet";
+
+/* Title question for update permission dialog */
+"Check for updates automatically?" = "Automatisch zoeken naar updates?";
+
+/* Include anonymous system profile choice for update permission dialog */
+"Include anonymous system profile" = "Voeg anoniem systeemprofiel bij";
+
+/* Automatically download and install updates choice for update permission dialog */
+"Automatically download and install updates" = "Download en installeer updates automatisch";
+
+/* Anonymous system profile information disclosure for update permission dialog */
+"Anonymous system profile information is used to help us plan future development work. Please contact us if you have any questions about this.\n\nThis is the information that would be sent:" = "Aan de hand van anonieme informatie over het systeemprofiel kunnen wij toekomstige ontwikkelingswerkzaamheden beter plannen. Neem contact met ons op als je hierover vragen hebt.\n\nDit is de informatie die wordt verzonden:";

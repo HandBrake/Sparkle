@@ -121,9 +121,6 @@
 /* Take care not to overflow the status window. */
 "Installing update…" = "Installing update…";
 
-/* No comment provided by engineer. */
-"Interactive based packages cannot be installed as the root user." = "Interactive based packages cannot be installed as the root user.";
-
 /* Alternate title for 'Install Update' button when there's no download in RSS feed. */
 "Learn More…" = "Learn More…";
 
@@ -161,7 +158,7 @@
 "The installation failed due to not having permission to write the new update." = "The installation failed due to not having permission to write the new update.";
 
 /* No comment provided by engineer. */
-"The update checker failed to start correctly. You should contact the app developer to report this issue and verify that you have the latest version." = "The update checker failed to start correctly. You should contact the app developer to report this issue and verify that you have the latest version.";
+"The updater failed to start. Please verify you have the latest version of %@ and contact the app developer if the issue still persists. Check the Console logs for more information." = "The updater failed to start. Please verify you have the latest version of %@ and contact the app developer if the issue still persists. Check the Console logs for more information.";
 
 /* No comment provided by engineer. */
 "The update is improperly signed and could not be validated. Please try again later or contact the app developer." = "The update is improperly signed and could not be validated. Please try again later or contact the app developer.";
@@ -198,3 +195,36 @@
 
 /* Status message shown when the user checks for updates but is already current or the feed doesn't contain any updates. */
 "You’re up to date!" = "You’re up to date!";
+
+/* Software Update title/label */
+"Software Update" = "Software Update";
+
+/* Remind Me Later choice for update alert */
+"Remind Me Later" = "Remind Me Later";
+
+/* Skip This Version choice for update alert */
+"Skip This Version" = "Skip This Version";
+
+/* Install Update choice for update alert */
+"Install Update" = "Install Update";
+
+/* Automatically download and install updates in the future option for update alert */
+"Automatically download and install updates in the future" = "Automatically download and install updates in the future";
+
+/* Check for updates automatically response for update permission dialog */
+"Check Automatically" = "Check Automatically";
+
+/* Don't check for updates automatically response for update permission dialog */
+"Don’t Check" = "Don’t Check";
+
+/* Title question for update permission dialog */
+"Check for updates automatically?" = "Check for updates automatically?";
+
+/* Include anonymous system profile choice for update permission dialog */
+"Include anonymous system profile" = "Include anonymous system profile";
+
+/* Automatically download and install updates choice for update permission dialog */
+"Automatically download and install updates" = "Automatically download and install updates";
+
+/* Anonymous system profile information disclosure for update permission dialog */
+"Anonymous system profile information is used to help us plan future development work. Please contact us if you have any questions about this.\n\nThis is the information that would be sent:" = "Anonymous system profile information is used to help us plan future development work. Please contact us if you have any questions about this.\n\nThis is the information that would be sent:";

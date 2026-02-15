@@ -42,7 +42,11 @@ static NSString *const SUUpdatePermissionPromptTouchBarIdentifier = @"" SPARKLE_
     IBOutlet NSView *_automaticallyDownloadUpdatesView;
     IBOutlet NSButton *_cancelButton;
     IBOutlet NSButton *_checkButton;
+    IBOutlet NSTextField *_checkForUpdatesAutomaticallyTextField;
+    IBOutlet NSButton *_includeAnonymousSystemProfileButton;
     IBOutlet NSButton *_anonymousInfoDisclosureButton;
+    IBOutlet NSButton *_automaticallyDownloadAndInstallUpdatesButton;
+    IBOutlet NSTextField *_anonymousSystemProfileDisclosureInformation;
     IBOutlet NSLayoutConstraint *_placeholderHeightLayoutConstraint;
     
     void (^_reply)(SUUpdatePermissionResponse *);
@@ -71,12 +75,12 @@ static NSString *const SUUpdatePermissionPromptTouchBarIdentifier = @"" SPARKLE_
 
 - (BOOL)shouldAskAboutProfile
 {
-    return [(NSNumber *)[_host objectForInfoDictionaryKey:SUEnableSystemProfilingKey] boolValue];
+    return [_host boolForInfoDictionaryKey:SUEnableSystemProfilingKey];
 }
 
 - (BOOL)allowsAutomaticUpdates
 {
-    NSNumber *allowsAutomaticUpdates = [_host objectForInfoDictionaryKey:SUAllowsAutomaticUpdatesKey];
+    NSNumber *allowsAutomaticUpdates = [_host boolNumberForInfoDictionaryKey:SUAllowsAutomaticUpdatesKey];
     return (allowsAutomaticUpdates == nil || allowsAutomaticUpdates.boolValue);
 }
 
@@ -95,6 +99,17 @@ static NSString *const SUUpdatePermissionPromptTouchBarIdentifier = @"" SPARKLE_
     [_stackView addArrangedSubview:_placeholderView];
     [_stackView addArrangedSubview:_moreInfoView];
     [_stackView addArrangedSubview:_responseView];
+    
+#if SPARKLE_COPY_LOCALIZATIONS
+    NSBundle *sparkleBundle = SUSparkleBundle();
+#endif
+    
+    _checkButton.title = SULocalizedStringFromTableInBundle(@"Check Automatically", SPARKLE_TABLE, sparkleBundle, nil);
+    _cancelButton.title = SULocalizedStringFromTableInBundle(@"Don’t Check", SPARKLE_TABLE, sparkleBundle, nil);
+    _checkForUpdatesAutomaticallyTextField.stringValue = SULocalizedStringFromTableInBundle(@"Check for updates automatically?", SPARKLE_TABLE, sparkleBundle, nil);
+    _includeAnonymousSystemProfileButton.title = SULocalizedStringFromTableInBundle(@"Include anonymous system profile", SPARKLE_TABLE, sparkleBundle, nil);
+    _automaticallyDownloadAndInstallUpdatesButton.title = SULocalizedStringFromTableInBundle(@"Automatically download and install updates", SPARKLE_TABLE, sparkleBundle, nil);
+    _anonymousSystemProfileDisclosureInformation.stringValue = SULocalizedStringFromTableInBundle(@"Anonymous system profile information is used to help us plan future development work. Please contact us if you have any questions about this.\n\nThis is the information that would be sent:", SPARKLE_TABLE, sparkleBundle, nil);
 }
 
 - (BOOL)tableView:(NSTableView *) __unused tableView shouldSelectRow:(NSInteger) __unused row { return NO; }

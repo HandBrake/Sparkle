@@ -26,6 +26,7 @@
 #import "SPUDownloadedUpdate.h"
 #import "SPUInstallationType.h"
 #import "SUConstants.h"
+#import "SPUProbeInstallStatus.h"
 
 
 #include "AppKitPrevention.h"
@@ -296,7 +297,7 @@
 
 - (void)_handleMessageWithIdentifier:(int32_t)identifier data:(NSData *)data SPU_OBJC_DIRECT
 {
-    if (!SPUInstallerMessageTypeIsLegal(_currentStage, identifier)) {
+    if (!SPUInstallerMessageTypeIsLegal(_currentStage, (SPUInstallerMessageType)identifier)) {
         SULog(SULogLevelError, @"Error: received out of order message with current stage: %d, requested stage: %d", _currentStage, identifier);
         return;
     }
@@ -305,14 +306,14 @@
     
     if (identifier == SPUExtractionStarted) {
         _extractionAttempts++;
-        _currentStage = identifier;
+        _currentStage = (SPUInstallerMessageType)identifier;
         [delegate installerDidStartExtracting];
     } else if (identifier == SPUExtractedArchiveWithProgress) {
         if (data.length == sizeof(double) && sizeof(double) == sizeof(uint64_t)) {
             uint64_t progressValue = CFSwapInt64LittleToHost(*(const uint64_t *)data.bytes);
             double progress = *(double *)&progressValue;
             [delegate installerDidExtractUpdateWithProgress:progress];
-            _currentStage = identifier;
+            _currentStage = (SPUInstallerMessageType)identifier;
         }
     } else if (identifier == SPUArchiveExtractionFailed) {
         // If this is a delta update, there must be a regular update we can fall back to
@@ -326,11 +327,11 @@
             [self _reportInstallerError:unarchivedError genericErrorCode:SUUnarchivingError genericUserInfo:genericUserInfo];
         }
     } else if (identifier == SPUValidationStarted) {
-        _currentStage = identifier;
+        _currentStage = (SPUInstallerMessageType)identifier;
     } else if (identifier == SPUInstallationStartedStage1) {
-        _currentStage = identifier;
+        _currentStage = (SPUInstallerMessageType)identifier;
     } else if (identifier == SPUInstallationFinishedStage1) {
-        _currentStage = identifier;
+        _currentStage = (SPUInstallerMessageType)identifier;
         
         // Let the installer keep a copy of the appcast item data
         // We may want to ask for it later (note the updater can relaunch without the app necessarily having relaunched)
@@ -342,19 +343,14 @@
             SULog(SULogLevelError, @"Error: Archived data to send for appcast item is nil");
         }
         
-        BOOL canInstallSilently = NO;
-        if (data.length >= sizeof(uint8_t)) {
-            canInstallSilently = (BOOL)*(const uint8_t *)data.bytes;
-        }
-        
         BOOL hasTargetTerminated = NO;
-        if (data.length >= sizeof(uint8_t) * 2) {
-            hasTargetTerminated = (BOOL)*((const uint8_t *)data.bytes + 1);
+        if (data.length >= sizeof(uint8_t)) {
+            hasTargetTerminated = (BOOL)*((const uint8_t *)data.bytes);
         }
         
-        [delegate installerDidFinishPreparationAndWillInstallImmediately:hasTargetTerminated silently:canInstallSilently];
+        [delegate installerDidFinishPreparationAndWillInstallImmediately:hasTargetTerminated];
     } else if (identifier == SPUInstallationFinishedStage2) {
-        _currentStage = identifier;
+        _currentStage = (SPUInstallerMessageType)identifier;
         
         BOOL hasTargetTerminated = NO;
         if (data.length >= sizeof(uint8_t)) {
@@ -371,7 +367,7 @@
         
         [delegate installerDidStartInstallingWithApplicationTerminated:hasTargetTerminated];
     } else if (identifier == SPUInstallationFinishedStage3) {
-        _currentStage = identifier;
+        _currentStage = (SPUInstallerMessageType)identifier;
         
         [_installerConnection invalidate];
         _installerConnection = nil;
@@ -464,6 +460,8 @@
     NSString *hostBundlePath = _host.bundle.bundlePath;
     assert(hostBundlePath != nil);
     
+    NSString *hostBundleIdentifier = _host.bundle.bundleIdentifier;
+    
     NSString *installationType = _updateItem.installationType;
     assert(installationType != nil);
     
@@ -489,7 +487,24 @@
                     self->_systemDomain = systemDomain;
                     [self setUpConnection];
                     [self sendInstallationData];
+
+                    // Complete immediately so the caller can set up state (e.g., _downloadedUpdateForRemoval)
+                    // before installer messages arrive on the main queue.
+                    // Previously, completionHandler was called inside the probe callback, which meant
+                    // installer messages (SPUExtractionStarted, SPUArchiveExtractionFailed) could be
+                    // processed before the completion handler fired, leaving _downloadedUpdateForRemoval
+                    // unset and causing an assertion crash in clearDownloadedUpdate.
                     completionHandler(nil);
+
+                    // Send a probe/ping to the status service, which should boost/prioritize its startup
+                    if (hostBundleIdentifier != nil) {
+                        [SPUProbeInstallStatus probeInstallerInProgressForHostBundleIdentifier:hostBundleIdentifier completion:^(BOOL stausServiceIsRunning) {
+                            if (!stausServiceIsRunning) {
+                                SULog(SULogLevelError, @"Error: failed to probe status service for %@ from the framework", hostBundleIdentifier);
+                            }
+                        }];
+                    }
+                    
                     break;
             }
         });

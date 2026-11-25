@@ -18,7 +18,17 @@ static NSTimeInterval OLD_ITEM_DELETION_INTERVAL = 86400 * 10; // 10 days
 
 + (NSString *)_cachePathForCacheDirectory:(NSURL *)cacheURL bundleIdentifier:(NSString *)bundleIdentifier SPU_OBJC_DIRECT
 {
-    NSString *resultPath = [[[cacheURL URLByAppendingPathComponent:bundleIdentifier isDirectory:YES] URLByAppendingPathComponent:@SPARKLE_BUNDLE_IDENTIFIER isDirectory:YES] path];
+    // If an app has an ill-formed bundle identifier that ends with ".app" we will append ".sparkle" to it
+    // so that the cache directory doesn't look like an app bundle directory, which can cause other systematic issues
+    // https://github.com/sparkle-project/Sparkle/discussions/2881
+    NSString *appCacheIdentifier;
+    if ([bundleIdentifier hasSuffix:@".app"] || [bundleIdentifier hasSuffix:@".APP"]) {
+        appCacheIdentifier = [bundleIdentifier stringByAppendingString:@".sparkle"];
+    } else {
+        appCacheIdentifier = bundleIdentifier;
+    }
+    
+    NSString *resultPath = [[[cacheURL URLByAppendingPathComponent:appCacheIdentifier isDirectory:YES] URLByAppendingPathComponent:@SPARKLE_BUNDLE_IDENTIFIER isDirectory:YES] path];
     assert(resultPath != nil);
     
     return resultPath;
@@ -29,19 +39,6 @@ static NSTimeInterval OLD_ITEM_DELETION_INTERVAL = 86400 * 10; // 10 days
 + (NSString *)cachePathForBundleIdentifier:(NSString *)bundleIdentifier
 {
     NSURL *cacheURL = [[NSFileManager defaultManager] URLForDirectory:NSCachesDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:NULL];
-    assert(cacheURL != nil);
-    
-    return [self _cachePathForCacheDirectory:cacheURL bundleIdentifier:bundleIdentifier];
-}
-
-+ (NSString *)cachePathForBundleIdentifier:(NSString *)bundleIdentifier userName:(NSString *)userName
-{
-    NSString *homeDirectory = NSHomeDirectoryForUser(userName);
-    assert(homeDirectory != nil);
-    
-    NSURL *homeDirectoryURL = [NSURL fileURLWithPath:homeDirectory isDirectory:YES];
-    
-    NSURL *cacheURL = [[homeDirectoryURL URLByAppendingPathComponent:@"Library" isDirectory:YES] URLByAppendingPathComponent:@"Caches" isDirectory:YES];
     assert(cacheURL != nil);
     
     return [self _cachePathForCacheDirectory:cacheURL bundleIdentifier:bundleIdentifier];
@@ -76,11 +73,11 @@ static NSTimeInterval OLD_ITEM_DELETION_INTERVAL = 86400 * 10; // 10 days
     }
 }
 
-+ (NSString * _Nullable)createUniqueDirectoryInDirectory:(NSString *)directory intermediateDirectoryFileAttributes:(NSDictionary<NSFileAttributeKey, id> *)intermediateDirectoryFileAttributes
++ (NSString * _Nullable)createUniqueDirectoryInDirectory:(NSString *)directory
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *createError = nil;
-    if (![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:intermediateDirectoryFileAttributes error:&createError]) {
+    if (![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:&createError]) {
         SULog(SULogLevelError, @"Failed to create directory with intermediate components at %@ with error %@", directory, createError);
         return nil;
     }
@@ -90,14 +87,11 @@ static NSTimeInterval OLD_ITEM_DELETION_INTERVAL = 86400 * 10; // 10 days
     if ([templateString getFileSystemRepresentation:buffer maxLength:sizeof(buffer)]) {
         if (mkdtemp(buffer) != NULL) {
             return [[NSString alloc] initWithUTF8String:buffer];
+        } else {
+            SULog(SULogLevelError, @"Failed to create templated intermediate cache directory using mkdtemp() with error: %d", errno);
         }
     }
     return nil;
-}
-
-+ (NSString * _Nullable)createUniqueDirectoryInDirectory:(NSString *)directory
-{
-    return [self createUniqueDirectoryInDirectory:directory intermediateDirectoryFileAttributes:nil];
 }
 
 @end

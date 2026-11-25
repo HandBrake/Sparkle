@@ -197,6 +197,7 @@
 		723C8A551E2D60DB00C14942 /* SUTouchBarButtonGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 723C8A531E2D60DB00C14942 /* SUTouchBarButtonGroup.m */; };
 		723C8A561E2D60DB00C14942 /* SUTouchBarButtonGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 723C8A531E2D60DB00C14942 /* SUTouchBarButtonGroup.m */; };
 		723EDC3F26885A8E000BCBA4 /* testappcast_channels.xml in Resources */ = {isa = PBXBuildFile; fileRef = 723EDC3E26885A8E000BCBA4 /* testappcast_channels.xml */; };
+		723F25FE2E75F76400462999 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 723F25FD2E75F76400462999 /* AppIcon.icon */; };
 		7240852E2CA11C1400ED2FCD /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7240852D2CA11C1400ED2FCD /* libz.tbd */; };
 		7245495C2ECA648000ABA991 /* SPUUpdaterSettings+Debug.h in Headers */ = {isa = PBXBuildFile; fileRef = 7245495B2ECA648000ABA991 /* SPUUpdaterSettings+Debug.h */; };
 		72464F701E1F31E000FB341C /* SUOperatingSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 726F2CE41BC9C33D001971A4 /* SUOperatingSystem.m */; };
@@ -229,6 +230,7 @@
 		725CB9571C7120410064365A /* SPUUserDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = 725CB9561C7120410064365A /* SPUUserDriver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		725CB95A1C7121830064365A /* SPUStandardUserDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = 725CB9581C7121830064365A /* SPUStandardUserDriver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		725CB95B1C7121830064365A /* SPUStandardUserDriver.m in Sources */ = {isa = PBXBuildFile; fileRef = 725CB9591C7121830064365A /* SPUStandardUserDriver.m */; };
+		725EA4B23027D2AF0041BFA6 /* test-package-update.xml in Resources */ = {isa = PBXBuildFile; fileRef = 725EA4B13027D2AF0041BFA6 /* test-package-update.xml */; };
 		725EE480277BF13B00D820CE /* SPUXarDeltaArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 725EE47F277BF13B00D820CE /* SPUXarDeltaArchive.m */; };
 		725EE482277BF44A00D820CE /* SPUXarDeltaArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 725EE47F277BF13B00D820CE /* SPUXarDeltaArchive.m */; };
 		725EE483277C767A00D820CE /* SPUXarDeltaArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 725EE47F277BF13B00D820CE /* SPUXarDeltaArchive.m */; };
@@ -1147,6 +1149,7 @@
 		723C8A531E2D60DB00C14942 /* SUTouchBarButtonGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUTouchBarButtonGroup.m; sourceTree = "<group>"; };
 		723DFF962B3DFF6E00628E6C /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		723EDC3E26885A8E000BCBA4 /* testappcast_channels.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = testappcast_channels.xml; sourceTree = "<group>"; };
+		723F25FD2E75F76400462999 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		7240852D2CA11C1400ED2FCD /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		7245495B2ECA648000ABA991 /* SPUUpdaterSettings+Debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SPUUpdaterSettings+Debug.h"; sourceTree = "<group>"; };
 		7246E0A11C83B685003B4E75 /* SPUStandardUpdaterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPUStandardUpdaterController.h; sourceTree = "<group>"; };
@@ -1187,6 +1190,7 @@
 		725CB9581C7121830064365A /* SPUStandardUserDriver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPUStandardUserDriver.h; sourceTree = "<group>"; };
 		725CB9591C7121830064365A /* SPUStandardUserDriver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPUStandardUserDriver.m; sourceTree = "<group>"; };
 		725DED72263D10C400E7FA8F /* SUAppcast+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SUAppcast+Private.h"; sourceTree = "<group>"; };
+		725EA4B13027D2AF0041BFA6 /* test-package-update.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "test-package-update.xml"; sourceTree = "<group>"; };
 		725EE47E277BF13A00D820CE /* SPUXarDeltaArchive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SPUXarDeltaArchive.h; path = Autoupdate/SPUXarDeltaArchive.h; sourceTree = SOURCE_ROOT; };
 		725EE47F277BF13B00D820CE /* SPUXarDeltaArchive.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SPUXarDeltaArchive.m; path = Autoupdate/SPUXarDeltaArchive.m; sourceTree = SOURCE_ROOT; };
 		725EE481277BF17A00D820CE /* SPUDeltaArchiveProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SPUDeltaArchiveProtocol.h; path = Autoupdate/SPUDeltaArchiveProtocol.h; sourceTree = SOURCE_ROOT; };
@@ -1845,6 +1849,7 @@
 				5A5DD41B249F0F4B0045EB3E /* test-relative-urls.xml */,
 				729F7EAB27366353004592DC /* test-links.xml */,
 				723AD12E29922B5F006BB02F /* test-dangerous-link.xml */,
+				725EA4B13027D2AF0041BFA6 /* test-package-update.xml */,
 				72C56E212F04C28B0005A484 /* testreleasenotes.html */,
 				5A5DD40324958AFF0045EB3E /* SUUpdateValidatorTest */,
 			);
@@ -2062,6 +2067,7 @@
 				72E45CF51B640DAE005C701A /* SUUpdateSettingsWindowController.m */,
 				72E45CF61B640DAE005C701A /* SUUpdateSettingsWindowController.xib */,
 				61B5F90409C4CEE200B25A18 /* TestApplication-Info.plist */,
+				723F25FD2E75F76400462999 /* AppIcon.icon */,
 				72F0EC44278A55CA002A876A /* screenshot.png */,
 			);
 			name = "Test Application";
@@ -3138,6 +3144,7 @@
 				72C56E262F04C28B0005A484 /* testreleasenotes.html in Resources */,
 				723AD12F29922B5F006BB02F /* test-dangerous-link.xml in Resources */,
 				72EB736129BEB36100FBCEE7 /* DevSignedAppVersion2.zip in Resources */,
+				725EA4B23027D2AF0041BFA6 /* test-package-update.xml in Resources */,
 				723EDC3F26885A8E000BCBA4 /* testappcast_channels.xml in Resources */,
 				720DC50427A51A6500DFF3EC /* testappcast_minimumAutoupdateVersionSkipping.xml in Resources */,
 				72E6D9712C04DE1A005496E4 /* SparkleTestCodeSign_pkg.dmg in Resources */,
@@ -3182,6 +3189,7 @@
 				72E45CFC1B641961005C701A /* sparkletestcast.xml in Resources */,
 				725F97A61C8B304D00265BE4 /* SUInstallUpdateViewController.xib in Resources */,
 				723ABE02259A9E9E00BDB4FA /* MainMenu.xib in Resources */,
+				723F25FE2E75F76400462999 /* AppIcon.icon in Resources */,
 				72F0EC45278A55CA002A876A /* screenshot.png in Resources */,
 				72E45CF81B640DAE005C701A /* SUUpdateSettingsWindowController.xib in Resources */,
 			);

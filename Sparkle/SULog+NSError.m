@@ -22,10 +22,12 @@ static void SULogErrors(NSArray<NSError *> *errors, int recursionLimit)
         
         NSDictionary<NSErrorUserInfoKey, id> *userInfo = error.userInfo;
         
-        NSArray<NSError *> *underlyingErrors = userInfo[NSMultipleUnderlyingErrorsKey];
-        if (underlyingErrors != nil) {
-            SULogErrors(underlyingErrors, recursionLimit - 1);
-            continue;
+        if (@available(macOS 11.3, *)) {
+            NSArray<NSError *> *underlyingErrors = userInfo[NSMultipleUnderlyingErrorsKey];
+            if (underlyingErrors != nil) {
+                SULogErrors(underlyingErrors, recursionLimit - 1);
+                continue;
+            }
         }
         
         NSError *underlyingError = userInfo[NSUnderlyingErrorKey];

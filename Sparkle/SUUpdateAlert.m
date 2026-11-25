@@ -299,10 +299,14 @@ typedef NS_ENUM(NSInteger, SUReleaseNotesFormat)
             usedReleaseNotesFormat = preferredReleaseNotesFormat;
             break;
         case SUReleaseNotesFormatHTML:
-            if ([[NSProcessInfo processInfo] isMacCatalystApp]) {
-                usedReleaseNotesFormat = SUReleaseNotesFormatPlainText;
-                
-                SULog(SULogLevelError, @"Error: Showing HTML release notes for Catalyst apps is not supported. The release notes will be interpreted as plain text. Please serve a plain-text (.txt) or markdown (.md) release notes file. If you are using a <description> element then please specify the %@=\"plain-text\" or %@=\"markdown\" attribute in that element.", SUAppcastAttributeFormat, SUAppcastAttributeFormat);
+            if (@available(macOS 10.15, *)) {
+                if ([[NSProcessInfo processInfo] isMacCatalystApp]) {
+                    usedReleaseNotesFormat = SUReleaseNotesFormatPlainText;
+                    
+                    SULog(SULogLevelError, @"Error: Showing HTML release notes for Catalyst apps is not supported. The release notes will be interpreted as plain text. Please serve a plain-text (.txt) or markdown (.md) release notes file. If you are using a <description> element then please specify the %@=\"plain-text\" or %@=\"markdown\" attribute in that element.", SUAppcastAttributeFormat, SUAppcastAttributeFormat);
+                } else {
+                    usedReleaseNotesFormat = preferredReleaseNotesFormat;
+                }
             } else {
                 usedReleaseNotesFormat = preferredReleaseNotesFormat;
             }
@@ -373,10 +377,12 @@ typedef NS_ENUM(NSInteger, SUReleaseNotesFormat)
     _releaseNotesView.view.frame = _releaseNotesContentView.bounds;
     _releaseNotesView.view.autoresizingMask = (NSAutoresizingMaskOptions)(NSViewWidthSizable | NSViewHeightSizable);
     
-    // We need a transparent background
-    // This avoids a "white flash" that may be present when the webview initially loads in dark mode
-    // This also is necessary for macOS 10.14, otherwise the background may stay white on 10.14 (but not in later OS's)
-    [_releaseNotesView setDrawsBackground:NO];
+    if (@available(macOS 10.14, *)) {
+        // We need a transparent background
+        // This avoids a "white flash" that may be present when the webview initially loads in dark mode
+        // This also is necessary for macOS 10.14, otherwise the background may stay white on 10.14 (but not in later OS's)
+        [_releaseNotesView setDrawsBackground:NO];
+    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
@@ -407,7 +413,11 @@ typedef NS_ENUM(NSInteger, SUReleaseNotesFormat)
         
         _releaseNotesBoxView.boxType = NSBoxCustom;
         _releaseNotesBoxView.cornerRadius = boxCornerRadius;
-        _releaseNotesBoxView.borderColor = NSColor.separatorColor;
+        if (@available(macOS 10.14, *)) {
+            _releaseNotesBoxView.borderColor = NSColor.separatorColor;
+        } else {
+            _releaseNotesBoxView.borderColor = [NSColor colorWithCalibratedWhite:0.84 alpha:1.0];
+        }
         _releaseNotesBoxView.borderWidth = boxBorderWidth;
         _releaseNotesBoxView.fillColor = NSColor.textBackgroundColor;
         
@@ -426,7 +436,7 @@ typedef NS_ENUM(NSInteger, SUReleaseNotesFormat)
     _installButton.title = SULocalizedStringFromTableInBundle(@"Install Update", SPARKLE_TABLE, sparkleBundle, @"");
     _automaticallyInstallUpdatesButton.title = SULocalizedStringFromTableInBundle(@"Automatically download and install updates in the future", SPARKLE_TABLE, sparkleBundle, @"");
     
-    if (@available(macOS 26, *)) {
+    if (@available(macOS 16, *)) {
         _skipButton.controlSize = NSControlSizeLarge;
         _laterButton.controlSize = NSControlSizeLarge;
         _installButton.controlSize = NSControlSizeLarge;

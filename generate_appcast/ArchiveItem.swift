@@ -89,6 +89,7 @@ class ArchiveItem: CustomStringConvertible {
     var releaseNotesURLPrefix: URL?
     var signingError: Error?
     
+    @available(macOS 10.15.4, *)
     private static func binaryContainsPreARMSlice(_ fileURL: URL) -> Bool? {
         guard let fileHandle = try? FileHandle(forReadingFrom: fileURL) else {
             return nil
@@ -179,7 +180,7 @@ class ArchiveItem: CustomStringConvertible {
         self._shortVersion = shortVersion
         self.feedURL = feedURL
         self.requiresSignedAppcast = requiresSignedAppcast
-        self.minimumSystemVersion = minimumSystemVersion ?? "12.0"
+        self.minimumSystemVersion = minimumSystemVersion ?? "10.13"
         self.hardwareRequirements = hardwareRequirements
         self.frameworkVersion = frameworkVersion
         self.sparkleExecutableFileSize = sparkleExecutableFileSize
@@ -198,12 +199,21 @@ class ArchiveItem: CustomStringConvertible {
     }
 
     convenience init(fromArchive archivePath: URL, unarchivedDir: URL, validateBundle: Bool, disableNestedCodeCheck: Bool) throws {
-        let resourceKeys: [URLResourceKey] = [.contentTypeKey]
+        let resourceKeys: [URLResourceKey]
+        if #available(macOS 11, *) {
+            resourceKeys = [.contentTypeKey]
+        } else {
+            resourceKeys = [.typeIdentifierKey]
+        }
         let items = try FileManager.default.contentsOfDirectory(at: unarchivedDir, includingPropertiesForKeys: resourceKeys, options: .skipsHiddenFiles)
 
         let bundles = items.filter({
             if let resourceValues = try? $0.resourceValues(forKeys: Set(resourceKeys)) {
-                return resourceValues.contentType!.conforms(to: .bundle)
+                if #available(macOS 11, *) {
+                    return resourceValues.contentType!.conforms(to: .bundle)
+                } else {
+                    return UTTypeConformsTo(resourceValues.typeIdentifier! as CFString, kUTTypeBundle)
+                }
             } else {
                 return false
             }
@@ -263,10 +273,12 @@ class ArchiveItem: CustomStringConvertible {
             
             var hardwareRequirements: String? = nil
             if mayNeedHardwareRequirement {
-                if let executableName = infoPlist[kCFBundleExecutableKey as String] as? String {
-                    let executablePath = appPath.appendingPathComponent("Contents/MacOS/\(executableName)")
-                    if let containsPreARMSlice = Self.binaryContainsPreARMSlice(executablePath), !containsPreARMSlice {
-                        hardwareRequirements = SUAppcastElementHardwareRequirementARM64
+                if #available(macOS 10.15.4, *) {
+                    if let executableName = infoPlist[kCFBundleExecutableKey as String] as? String {
+                        let executablePath = appPath.appendingPathComponent("Contents/MacOS/\(executableName)")
+                        if let containsPreARMSlice = Self.binaryContainsPreARMSlice(executablePath), !containsPreARMSlice {
+                            hardwareRequirements = SUAppcastElementHardwareRequirementARM64
+                        }
                     }
                 }
             }

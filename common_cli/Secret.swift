@@ -62,18 +62,24 @@ enum DecodeSecretStringError : LocalizedError {
 
 // Reads secret base64 string from a file
 func decodeSecretString(filePath: String) throws -> String {
-    // Use FileHandle because it supports process substitution:
-    // https://github.com/sparkle-project/Sparkle/issues/2605
-    let fileHandle = try FileHandle(forReadingFrom: URL(fileURLWithPath: filePath))
-    
-    guard let data = try fileHandle.readToEnd() else {
-        throw DecodeSecretStringError.unableToReadData
+    let privateKeyString: String
+    if #available(macOS 10.15.4, *) {
+        // Prefer to use FileHandle which supports process substitution:
+        // https://github.com/sparkle-project/Sparkle/issues/2605
+        let fileHandle = try FileHandle(forReadingFrom: URL(fileURLWithPath: filePath))
+        
+        guard let data = try fileHandle.readToEnd() else {
+            throw DecodeSecretStringError.unableToReadData
+        }
+        
+        guard let decodedPrivateKeyString = String(data: data, encoding: .utf8) else {
+            throw DecodeSecretStringError.unableToDecodeDataAsUTF8String
+        }
+        
+        privateKeyString = decodedPrivateKeyString
+    } else {
+        privateKeyString = try String(contentsOf: URL(fileURLWithPath: filePath))
     }
     
-    guard let decodedPrivateKeyString = String(data: data, encoding: .utf8) else {
-        throw DecodeSecretStringError.unableToDecodeDataAsUTF8String
-    }
-    
-    let privateKeyString = decodedPrivateKeyString
     return privateKeyString.trimmingCharacters(in: .whitespacesAndNewlines)
 }
